@@ -11,7 +11,7 @@ const covenant = (name, value) => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({ covenantAct: covenant }, dispatch);
 //组件
-export class Query extends Component {
+/*export class Query extends Component {
   constructor(props) {
     super(props);
     let { query, type, name, variables, forcedUpdate = false, awaitQuery = false, updateQuery, children } = props;
@@ -33,14 +33,14 @@ export class Query extends Component {
     let QueryComponent = this.QueryComponent;
     return <QueryComponent />;
   }
-}
+}*/
 // 连接器
 const queryConnect = (query, options = {}) => WrappedComponent => {
   const mapStateToProps = state => {
     let queryName = options.name || query.name;
     return {
       queryName,
-      store: state.covenant[queryName] || {},
+      store: state.covenant[queryName] || null,
     };
   };
 

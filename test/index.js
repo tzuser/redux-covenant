@@ -1,2 +1,3 @@
-import { Provider } from '../build/index';
-console.log('test', Provider);
+//import * as test from '../build/index';
+let test = require('../build/index');
+console.log('test', test);

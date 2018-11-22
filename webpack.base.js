@@ -9,8 +9,15 @@ module.exports = {
     path: path.resolve(__dirname, 'build'),
     publicPath: '/',
     filename: '[name].js',
-    library: 'react-covenant', // string,
+    globalObject: 'this',
+    library: 'redux-covenant', // string,
     libraryTarget: 'umd', // univ
+  },
+  externals: {
+    redux: 'redux',
+    react: 'react',
+    'react-dom': 'react-dom',
+    'react-redux': 'react-redux',
   },
   module: {
     rules: [

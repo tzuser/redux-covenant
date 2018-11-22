@@ -1,5 +1,5 @@
 const cache = {
-  data: {},
+  data: typeof window == 'object' ? window._INIT_CACHE_ : {},
   set: function(cacheName, { name, data }) {
     this.data[cacheName] = { name, data };
   },
@@ -26,4 +26,5 @@ const cache = {
     }
   },
 };
+
 export default cache;
