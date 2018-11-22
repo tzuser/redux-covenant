@@ -1,5 +1,6 @@
+let data = typeof window == 'object' ? window._INIT_CACHE_ || {} : {};
 const cache = {
-  data: typeof window == 'object' ? window._INIT_CACHE_ : {},
+  data: data,
   set: function(cacheName, { name, data }) {
     this.data[cacheName] = { name, data };
   },
