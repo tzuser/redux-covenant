@@ -1,4 +1,4 @@
-# redux-covenant
+# Covenant
 Covenant 可以让你轻松构建请求数据的UI组件。支持服务端渲染及首屏数据请求。
 
 > 我正在构建context做为Store的Covenant，以及hooks版Covenant
@@ -9,7 +9,7 @@ npm install redux-covenant --save
 # Start
 
 添加Covenant到Reducers `/src/reducers/index.js`
-```
+```javascript
 import {combineReducers} from 'redux';
 import {covenant} from 'redux-covenant';
 
@@ -22,7 +22,7 @@ export default combineReducers({
 
 
 编写Query方法 `/src/api/banner.js`
-```
+```javascript
 import axios from 'axios';
 
 export async function banner({ city_no = '020', platform = '1' }) {
@@ -35,7 +35,7 @@ export async function banner({ city_no = '020', platform = '1' }) {
 
 
 组件开发
-```
+```javascript
 import React, {Component} from 'react';
 import {banner} from '/src/api/home';
 import {query} from 'redux-covenant';
