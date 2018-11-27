@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import getQueryComponent from '../QueryComponent';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 const covenant = (name, value) => ({
   type: `covenant/${name}`,
@@ -9,7 +9,7 @@ const covenant = (name, value) => ({
   value,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ covenantAct: covenant }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({covenantAct: covenant}, dispatch);
 //组件
 /*export class Query extends Component {
   constructor(props) {

@@ -1,8 +1,11 @@
 let data = typeof window == 'object' ? window._INIT_CACHE_ || {} : {};
+/* cache {
+  [name]:{name,data}
+}*/
 const cache = {
   data: data,
-  set: function(cacheName, { name, data }) {
-    this.data[cacheName] = { name, data };
+  set: function(cacheName, {name, data}) {
+    this.data[cacheName] = {name, data};
   },
   get: function(name) {
     return this.data[name];
