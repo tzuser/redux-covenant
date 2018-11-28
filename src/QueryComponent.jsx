@@ -3,23 +3,6 @@ import cache from './cache';
 import memory from './memory';
 import {getCacheName, getVariablesData} from './utils';
 
-/*function getQueryComponent({
-  query,
-  WrappedComponent,
-  renderFun,
-  name,
-  variables = {},
-  forcedUpdate = false,
-  awaitQuery = false,
-  ssr = true,
-  updateQuery,
-}) {
-
-  
-  return QueryComponent;
-}
-*/
-
 class QueryComponent extends Component {
   constructor(props) {
     super(props);
@@ -37,7 +20,6 @@ class QueryComponent extends Component {
     let {variables, forcedUpdate, updateQuery,loading} = this.props;
     let changeVariables = prevProps.variables !== variables;
     let handleLoading = prevProps.loading && !loading;
-    console.log(changeVariables,handleLoading)
     if (changeVariables || handleLoading) {
       this.queryData(this.props, variables, forcedUpdate, updateQuery);
     }
