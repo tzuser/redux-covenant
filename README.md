@@ -4,7 +4,7 @@ Covenant 可以让你轻松构建请求数据的UI组件。支持服务端渲染
 > 我正在构建context做为Store的Covenant，以及hooks版Covenant
 
 # Exampls
-[Base](https://codesandbox.io/s/vjp3xzv27)
+[Base](https://codesandbox.io/s/vjp3xzv27/?_blank)
 
 # Installation
 ```
