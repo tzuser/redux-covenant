@@ -1,4 +1,5 @@
-export function getCacheName(name, data) {
+// 通过请求参数生成这次请求的唯一标识
+export function getCacheName(name, data={}) {
   let list = [];
   for (let [key, value] of Object.entries(data)) {
     list.push({ key, value });
