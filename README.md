@@ -6,6 +6,9 @@ Covenant 可以让你轻松构建请求数据的UI组件。支持服务端渲染
 # Example
 [Base](https://codesandbox.io/s/vjp3xzv27)
 
+[LoadMore](https://codesandbox.io/s/7zn7m37911)
+
+
 # Installation
 ```
 npm install redux-covenant --save
