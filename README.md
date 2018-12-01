@@ -66,7 +66,3 @@ class Banner extends Component {
 }
 export default Banner;
 ```
-更多用法请参考API
-
-query
-正在编写中...
