@@ -17,7 +17,7 @@ export function getCacheName(name, data={}) {
   return name;
 }
 
-export function getVariablesData(variables, props) {
+export function getVariablesData(variables={}, props) {
   if (typeof variables === 'function') {
     return variables(props);
   } else {
