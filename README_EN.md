@@ -29,7 +29,6 @@ export default combineReducers({
 
 ```
 
-
 The Request Method `/src/api/banner.js`
 ```javascript
 import axios from 'axios';

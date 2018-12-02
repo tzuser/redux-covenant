@@ -68,6 +68,7 @@ class Banner extends Component {
 }
 export default Banner;
 ```
+
 # Covenant Api
 `import {query} from 'redux-covenant';`
 ##### query(Promise,config)
