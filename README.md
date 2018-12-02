@@ -78,7 +78,7 @@ export default Banner;
 
 ## Query Config
 
-```json
+```javascript
 {
   // `name` 请求成功后将会成为props的一个key
   name:'doctorList',
