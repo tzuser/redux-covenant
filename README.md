@@ -3,17 +3,19 @@ Covenant 可以让你轻松构建请求数据的UI组件。支持服务端渲染
 
 > 我正在构建context做为Store的Covenant，以及hooks版Covenant
 
-# Example
+Language: [English](README_EN.md)
+
+# 例子
 [Base](https://codesandbox.io/s/vjp3xzv27)
 
 [LoadMore](https://codesandbox.io/s/7zn7m37911)
 
 
-# Installation
+# 安装
 ```
 npm install redux-covenant --save
 ```
-# Start
+# 起步
 
 添加Covenant到Reducers `/src/reducers/index.js`
 ```javascript
@@ -33,8 +35,8 @@ export default combineReducers({
 import axios from 'axios';
 
 export async function banner({ city_no = '020', platform = '1' }) {
-  let url = `https://m.gstzy.cn/api/admin.360gst.com/Interface/getbanner`;
-  let res = await axios.get(url, { params: { city_no, platform } });
+  const url = `http://httpbin.org/get`;
+  const res = await axios.get(url, { params: { city_no, platform } });
   // 这里可以做一些错误处理，只需要将错误抛出 throw new Error("")
   return { list: res.data.data };
 }
@@ -66,3 +68,43 @@ class Banner extends Component {
 }
 export default Banner;
 ```
+
+# Covenant Api
+`import {query} from 'redux-covenant';`
+##### query(Promise,config)
+
+## Promise
+一个异步流
+
+## Query Config
+
+```javascript
+{
+  // `name` 请求成功后将会成为props的一个key
+  name:'doctorList',
+  
+  // `variables`为异步流提供参数
+  variables:props => ({
+    shop_id: props.shopId,
+    page_size: 4,
+  }),
+}
+
+```
+
+在返回的this.prop包含几个api
+`fetchMore(config)`,获取更多
+`json
+confing
+{
+  //`variables`为异步流提供参数
+variables: {page_no: doctorList.page + 1},
+//`updateQuery`为异步流返回的结果，参数为之前的结果和新返回的数据
+updateQuery: (previousResult, fetchMoreResult) => {
+      return fetchMoreResult;
+},
+}
+
+`
+
+`refetch`,重新获取，相当强制重新拉取初始化的数据
