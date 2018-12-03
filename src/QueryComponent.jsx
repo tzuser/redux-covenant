@@ -14,17 +14,17 @@ class QueryComponent extends Component {
   }
   //创建组件时首次请求数据
   initialQuery(props) {
-    let {queryName, variables, forcedUpdate, updateQuery, ...other} = props;
-    let variablesData = this.getVariablesData(variables, props);
+    let {queryName, variables, forcedUpdate, updateQuery, aisle} = props;
+    let variablesData = this.getVariablesData(variables, aisle);
     const cacheName = getCacheName(queryName, variablesData);
     this.cacheName = cacheName;
     return this.queryData({props, variablesData, cacheName, forcedUpdate, updateQuery});
   }
   // cacheName 为本次请求的特征码
   async queryData({props, variablesData, cacheName, forcedUpdate, updateQuery}) {
-    let {store, setStore, query, queryName, loading: fatherLoading, ...other} = props;
+    let {store, setStore, query, queryName, hold} = props;
     //等待父级加载完成
-    if (fatherLoading) {
+    if (hold) {
       return;
     }
     //this.cacheName=cacheName;
@@ -34,7 +34,7 @@ class QueryComponent extends Component {
       //如果当前正在请求
       await new Promise(resolve => setTimeout(resolve));
       //设置状态为加载中...
-      setStore(queryName, {loading: true});
+      await setStore(queryName, {loading: true});
       //请求数据
       let res;
       try {
@@ -43,7 +43,7 @@ class QueryComponent extends Component {
         /*if(cacheName!==this.cacheName){
           return
         }*/
-        setStore(queryName, {error: err.message, loading: false});
+        await setStore(queryName, {error: err.message, loading: false});
         return;
       }
       /*if(cacheName!==this.cacheName){
@@ -59,23 +59,24 @@ class QueryComponent extends Component {
       }
       resData.loading = false;
       resData.error = null;
-      setStore(queryName, resData);
+      await setStore(queryName, resData);
       cache.set(cacheName, {name: queryName, data: res});
-    } else {
-      const fetchMoreResult = Object.assign({}, cache.getData(cacheName));
-      // 请求数据处理
-      if (updateQuery) {
-        let resData = updateQuery(previousResult, fetchMoreResult);
-        setStore(queryName, resData);
-      } else {
-        setStore(queryName, fetchMoreResult);
-      }
+      return resData;
     }
+    const fetchMoreResult = Object.assign({}, cache.getData(cacheName));
+    // 请求数据处理
+    if (updateQuery) {
+      let resData = updateQuery(previousResult, fetchMoreResult);
+      await setStore(queryName, resData);
+      return resData;
+    }
+    await setStore(queryName, fetchMoreResult);
+    return fetchMoreResult;
   }
   //对比是否需要请求
   diffQuery() {
-    let {variables, queryName} = this.props;
-    let variablesData = this.getVariablesData(variables, this.props);
+    let {variables, queryName, aisle} = this.props;
+    let variablesData = this.getVariablesData(variables, aisle);
     let cacheName = getCacheName(queryName, variablesData);
     let isDiff = this.cacheName === cacheName;
     this.cacheName = cacheName;
@@ -83,10 +84,10 @@ class QueryComponent extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    let {variables, forcedUpdate, queryName, updateQuery, loading} = this.props;
+    let {hold} = this.props;
     let changeVariables = !this.diffQuery(); //variables引用变化
-    let handleLoading = prevProps.loading && !loading; //loading变化
-    if (changeVariables || handleLoading) {
+    let handleHold = prevProps.hold && !hold; //hold变化
+    if (changeVariables || handleHold) {
       this.handleData();
     }
   }
@@ -97,15 +98,14 @@ class QueryComponent extends Component {
     let res = initialQuery(this.props);
     return res;
   }
-  getVariablesData(variables, props) {
-    let {store, setStore, query, queryName, loading: fatherLoading, ...other} = props;
-    return getVariablesData(variables, other);
+  getVariablesData(variables, aisle) {
+    return getVariablesData(variables, aisle);
   }
 
   // 重新请求数据，会清楚之前store
   handleData() {
-    let {queryName, variables, forcedUpdate, clearStore} = this.props;
-    let variablesData = this.getVariablesData(variables, this.props);
+    let {queryName, variables, forcedUpdate, clearStore, aisle} = this.props;
+    let variablesData = this.getVariablesData(variables, aisle);
     const cacheName = getCacheName(queryName, variablesData);
     this.cacheName = cacheName;
     clearStore(queryName);
@@ -114,29 +114,29 @@ class QueryComponent extends Component {
 
   // 重新请求数据，会清除缓存
   refetch() {
-    let {queryName, variables, forcedUpdate} = this.props;
+    let {queryName, variables, forcedUpdate, aisle} = this.props;
     if (!forcedUpdate) {
       cache.clearByName(queryName);
     }
-    let variablesData = this.getVariablesData(variables, this.props);
+    let variablesData = this.getVariablesData(variables, aisle);
     const cacheName = getCacheName(queryName, variablesData);
-    this.queryData({props: this.props, variablesData, cacheName, forcedUpdate: true});
+    return this.queryData({props: this.props, variablesData, cacheName, forcedUpdate: true});
   }
 
   // 获取更多数据
   fetchMore({variables = {}, forcedUpdate = false, updateQuery}) {
-    let prevVariablesData = this.getVariablesData(this.props.variables, this.props);
-    let variablesData = this.getVariablesData(variables, this.props);
+    let prevVariablesData = this.getVariablesData(this.props.variables, this.props.aisle);
+    let variablesData = this.getVariablesData(variables, this.props.aisle);
     let newVariablesData = Object.assign({}, prevVariablesData, variablesData);
     const cacheName = getCacheName(this.props.queryName, newVariablesData);
-    this.queryData({props: this.props, variablesData: newVariablesData, cacheName, forcedUpdate, updateQuery});
+    return this.queryData({props: this.props, variablesData: newVariablesData, cacheName, forcedUpdate, updateQuery});
   }
 
   render() {
-    let {store, setStore, queryName, WrappedComponent, renderFun, query, ...other} = this.props;
+    let {store, queryName, WrappedComponent, renderFun, aisle} = this.props;
     //剔除store setStore
     let newProps = {
-      ...other,
+      ...aisle,
       refetch: this.refetch.bind(this),
       fetchMore: this.fetchMore.bind(this),
       [queryName]: store || {loading: true},

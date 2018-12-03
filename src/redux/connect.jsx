@@ -2,12 +2,16 @@ import React, {Component} from 'react';
 import QueryComponent from '../QueryComponent';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {covenantAct,covenantClearAct} from './covenantStore';
+import {covenantAct, covenantClearAct} from './covenantStore';
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-  covenantAct: covenantAct,
-  covenantClearAct:covenantClearAct,
-}, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      covenantAct: covenantAct,
+      covenantClearAct: covenantClearAct,
+    },
+    dispatch
+  );
 
 // 连接器
 const queryConnect = (query, options = {}) => WrappedComponent => {
@@ -25,9 +29,13 @@ const queryConnect = (query, options = {}) => WrappedComponent => {
   )
   class QueryConsumer extends Component {
     render() {
+      let {queryName, store, hold, ...aisle} = this.props;
       return (
         <QueryComponent
-          {...this.props}
+          aisle={aisle}
+          queryName={queryName}
+          hold={hold}
+          store={store}
           query={query}
           WrappedComponent={WrappedComponent}
           variables={options.variables}
@@ -36,7 +44,7 @@ const queryConnect = (query, options = {}) => WrappedComponent => {
           setStore={(name, value) => {
             this.props.covenantAct(name, value);
           }}
-          clearStore={(name)=>{
+          clearStore={name => {
             this.props.covenantClearAct(name);
           }}
         />
